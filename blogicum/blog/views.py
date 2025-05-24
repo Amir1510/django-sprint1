@@ -1,6 +1,6 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
-# Create your views here.
 posts = [
     {
         'id': 0,
@@ -53,6 +53,12 @@ def index(request):
 
 
 def post_detail(request, id):
+    try:
+        if id > len(posts) - 1:
+            raise IndexError
+    except IndexError:
+        return HttpResponse('<h1 style="text-align: center;">'
+                            '404 Page not found</h1>')
     context = {
         'post': posts[id]
     }
