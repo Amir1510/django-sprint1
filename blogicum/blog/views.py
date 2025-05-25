@@ -1,4 +1,4 @@
-from django.http import HttpResponseNotFound, Http404
+from django.http import Http404
 from django.shortcuts import render
 
 posts = [
@@ -56,6 +56,7 @@ def index(request):
 
 def post_detail(request, post_id):
     post = post_ids.get(post_id)
+
     if post is None:
         raise Http404(f'Post with id={post_id} not found')
 
