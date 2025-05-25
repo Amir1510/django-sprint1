@@ -1,5 +1,5 @@
+from django.http import HttpResponseNotFound, Http404
 from django.shortcuts import render
-from django.http import HttpResponse
 
 posts = [
     {
@@ -44,6 +44,8 @@ posts = [
     },
 ]
 
+post_ids = {post['id']: post for post in posts}
+
 
 def index(request):
     context = {
@@ -52,15 +54,13 @@ def index(request):
     return render(request, 'blog/index.html', context)
 
 
-def post_detail(request, id):
-    try:
-        if id > len(posts) - 1:
-            raise IndexError
-    except IndexError:
-        return HttpResponse('<h1 style="text-align: center;">'
-                            '404 Page not found</h1>')
+def post_detail(request, post_id):
+    post = post_ids.get(post_id)
+    if post is None:
+        raise Http404(f'Post with id={post_id} not found')
+
     context = {
-        'post': posts[id]
+        'post': post
     }
     return render(request, 'blog/detail.html', context)
 
